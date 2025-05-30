@@ -53,7 +53,9 @@ export async function GET() {
   return new Response(JSON.stringify(manifest), {
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+      Pragma: "no-cache",
+      Expires: "0",
     },
   });
 }

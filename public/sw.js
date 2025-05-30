@@ -1,7 +1,6 @@
-const CACHE_NAME = 'pwa-icon-selector-v2';
+const CACHE_NAME = 'pwa-icon-selector-v3';
 const urlsToCache = [
     '/',
-    '/manifest.json',
     '/iconsets/a/pwa-64x64.png',
     '/iconsets/a/pwa-192x192.png',
     '/iconsets/a/pwa-512x512.png',
@@ -14,6 +13,11 @@ const urlsToCache = [
     '/iconsets/b/maskable-icon-512x512.png',
 ];
 
+// URLs that should never be cached (always fetch fresh)
+const noCacheUrls = [
+    '/manifest.json'
+];
+
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -22,6 +26,15 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+
+    // Always fetch manifest.json fresh (never serve from cache)
+    if (noCacheUrls.some(path => url.pathname === path)) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    // For other requests, use cache-first strategy
     event.respondWith(
         caches.match(event.request)
             .then((response) => {

@@ -71,6 +71,8 @@ A dynamic Progressive Web App (PWA) that allows users to choose between differen
 
 The app includes a basic service worker (`/sw.js`) that caches both icon sets and essential resources for offline functionality.
 
+**Important**: The `manifest.json` file is **never cached** by the service worker to ensure dynamic icon changes work correctly across all browsers, especially Chrome desktop. The service worker uses a network-first strategy for the manifest while using cache-first for static assets.
+
 ### Design System
 
 The interface uses only shadcn/ui design tokens for consistent theming:
