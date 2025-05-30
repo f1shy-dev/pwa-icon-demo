@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
-import { getIconSetFromCookies } from "@/lib/utils";
+import { getIconSetFromCookies, getIconUrlWithCacheBust } from "@/lib/utils";
 import ServiceWorkerProvider from "@/components/ServiceWorkerProvider";
 import "./globals.css";
 
@@ -25,20 +25,32 @@ export async function generateMetadata(): Promise<Metadata> {
     description: "Choose your preferred PWA icon set",
     manifest: "/manifest.json",
     icons: {
-      apple: `/iconsets/${iconSet}/apple-touch-icon-180x180.png`,
+      apple: getIconUrlWithCacheBust(
+        iconSet,
+        "apple-touch-icon-180x180.png",
+        cookieHeader
+      ),
       icon: [
         {
-          url: `/iconsets/${iconSet}/pwa-64x64.png`,
+          url: getIconUrlWithCacheBust(iconSet, "pwa-64x64.png", cookieHeader),
           sizes: "64x64",
           type: "image/png",
         },
         {
-          url: `/iconsets/${iconSet}/pwa-192x192.png`,
+          url: getIconUrlWithCacheBust(
+            iconSet,
+            "pwa-192x192.png",
+            cookieHeader
+          ),
           sizes: "192x192",
           type: "image/png",
         },
         {
-          url: `/iconsets/${iconSet}/pwa-512x512.png`,
+          url: getIconUrlWithCacheBust(
+            iconSet,
+            "pwa-512x512.png",
+            cookieHeader
+          ),
           sizes: "512x512",
           type: "image/png",
         },
@@ -52,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
     formatDetection: {
       telephone: false,
     },
-    themeColor: "#1e293b",
+    themeColor: "hsl(var(--background))",
     viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   };
 }
@@ -70,9 +82,9 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="none" />
-        <meta name="msapplication-TileColor" content="#1e293b" />
+        <meta name="msapplication-TileColor" content="hsl(var(--background))" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#1e293b" />
+        <meta name="theme-color" content="hsl(var(--background))" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

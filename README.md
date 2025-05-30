@@ -12,6 +12,8 @@ A dynamic Progressive Web App (PWA) that allows users to choose between differen
 - 🔄 **Real-time Updates**: Icons update immediately when you change your selection
 - 🍎 **Apple Touch Icon**: Dynamic apple-touch-icon generation based on selection
 - 📋 **Dynamic Manifest**: PWA manifest.json generated dynamically based on icon choice
+- 🧹 **iOS Cache Busting**: Random query parameters force iOS to refresh cached icons
+- 🎨 **shadcn/ui Design**: Clean interface using only design system tokens
 
 ## Icon Sets
 
@@ -39,8 +41,14 @@ A dynamic Progressive Web App (PWA) that allows users to choose between differen
    - Cookie name: `pwa-iconset`
    - Values: `'a'` or `'b'`
    - Default: `'a'` if no cookie is set
+   
+4. **iOS Cache Busting**:
+   - Cookie name: `pwa-cache-bust`
+   - Contains: 8-character nanoid (e.g., `'hkgRgQRU'`)
+   - Applied to: All icon URLs as query parameter `?v=<nanoid>`
+   - Purpose: Forces iOS to refresh cached PWA icons when switching sets
 
-4. **Icon Organization**:
+5. **Icon Organization**:
    ```
    public/iconsets/
    ├── a/
@@ -62,6 +70,14 @@ A dynamic Progressive Web App (PWA) that allows users to choose between differen
 ### Service Worker
 
 The app includes a basic service worker (`/sw.js`) that caches both icon sets and essential resources for offline functionality.
+
+### Design System
+
+The interface uses only shadcn/ui design tokens for consistent theming:
+- `background`, `foreground`, `muted`, `muted-foreground` for colors
+- `primary`, `secondary` for accent colors
+- `card`, `border` for surfaces and borders
+- No hardcoded colors - all values use CSS custom properties
 
 ## Getting Started
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-icon-selector-v1';
+const CACHE_NAME = 'pwa-icon-selector-v2';
 const urlsToCache = [
     '/',
     '/manifest.json',

@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { nanoid } from "nanoid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,6 +21,24 @@ export function setCookie(name: string, value: string, days = 365): void {
 
 export type IconSet = "a" | "b";
 
+export function generateCacheBustId(): string {
+  return nanoid(8);
+}
+
+export function getCacheBustId(cookieHeader?: string): string {
+  if (!cookieHeader) return generateCacheBustId();
+
+  const cookies = {} as Record<string, string>;
+  for (const cookie of cookieHeader.split(";")) {
+    const [key, value] = cookie.trim().split("=");
+    if (key && value) {
+      cookies[key] = value;
+    }
+  }
+
+  return cookies["pwa-cache-bust"] || generateCacheBustId();
+}
+
 export function getIconSetFromCookies(cookieHeader?: string): IconSet {
   if (!cookieHeader) return "a";
 
@@ -33,4 +52,13 @@ export function getIconSetFromCookies(cookieHeader?: string): IconSet {
 
   const iconSet = cookies["pwa-iconset"];
   return iconSet === "b" ? "b" : "a";
+}
+
+export function getIconUrlWithCacheBust(
+  iconSet: IconSet,
+  iconPath: string,
+  cookieHeader?: string
+): string {
+  const cacheBustId = getCacheBustId(cookieHeader);
+  return `/iconsets/${iconSet}/${iconPath}?v=${cacheBustId}`;
 }
